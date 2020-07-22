@@ -1,0 +1,27 @@
+{
+  "name": "cocktailsharer",
+  "version": "1.0.0",
+  "description": "Cocktail Sharing Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "mocha"
+  },
+  "author": "Marcel <mk1694@live.mdx.ac.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "http": "0.0.0",
+    "mocha": "^7.1.2",
+    "mysql2": "^2.1.0",
+    "nodemon": "^2.0.3",
+    "sequelize": "^5.21.8",
+    "uuid": "^7.0.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^5.5.1"
+  }
+}
