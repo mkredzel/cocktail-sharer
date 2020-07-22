@@ -2,7 +2,7 @@
 
 A cocktail recipe sharing app built with Node.js, Express, MySQL, Sequelize and Vue.js
 
-Users can share and edit their favourite recipes with others by completing registration and loggin in, while admin has a right to delete recipes.
+Users can share and edit their favourite recipes with others by completing registration and loggin in, while administartor has an access to delete recipes.
 
 ## Installation and Setup Instructions
 
