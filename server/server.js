@@ -1,9 +1,9 @@
 const sequelize = require("./database/connection");
-const bodyParser = require("body-parser");
 const { Op } = require("sequelize");
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const uuidv4 = require("uuid/v4");
+var cors = require("cors");
 const saltRounds = 10;
 const app = express();
 
@@ -12,8 +12,8 @@ const User = require("./models/User");
 const Cocktail = require("./models/Cocktail");
 
 // Body-parser for forms
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
 
 // DB Connection
 require("./database/connection");
@@ -22,16 +22,14 @@ require("./database/connection");
 sequelize
   .authenticate()
   .then(() => console.log("Database connected..."))
-  .catch(err => console.log("Error: " + err));
+  .catch((err) => console.log("Error: " + err));
 
-// Set static folder
-app.use(express.static("public"));
-app.use("/../public", express.static("public"));
+app.use(cors());
 
 // Data structure that will be accessed using the web service
 let cocktailArray;
 
-Cocktail.findAll().then(cocktails => {
+Cocktail.findAll().then((cocktails) => {
   cocktailArray = JSON.stringify(cocktails);
 });
 
@@ -56,7 +54,7 @@ function handleGetRequest(req, res) {
 
   if (pathEnd === "cocktails") {
     // return all cocktails
-    Cocktail.findAll().then(cocktails => {
+    Cocktail.findAll().then((cocktails) => {
       cocktailArray = JSON.stringify(cocktails);
     });
     res.send(cocktailArray);
@@ -65,10 +63,10 @@ function handleGetRequest(req, res) {
     Cocktail.findAll({
       where: {
         ingredients: {
-          [Op.like]: "%gin%"
-        }
-      }
-    }).then(cocktails => {
+          [Op.like]: "%gin%",
+        },
+      },
+    }).then((cocktails) => {
       cocktailArray = JSON.stringify(cocktails);
     });
     res.send(cocktailArray);
@@ -77,10 +75,10 @@ function handleGetRequest(req, res) {
     Cocktail.findAll({
       where: {
         ingredients: {
-          [Op.like]: "%vodka%"
-        }
-      }
-    }).then(cocktails => {
+          [Op.like]: "%vodka%",
+        },
+      },
+    }).then((cocktails) => {
       cocktailArray = JSON.stringify(cocktails);
     });
     res.send(cocktailArray);
@@ -89,10 +87,10 @@ function handleGetRequest(req, res) {
     Cocktail.findAll({
       where: {
         ingredients: {
-          [Op.like]: "%rum%"
-        }
-      }
-    }).then(cocktails => {
+          [Op.like]: "%rum%",
+        },
+      },
+    }).then((cocktails) => {
       cocktailArray = JSON.stringify(cocktails);
     });
     res.send(cocktailArray);
@@ -101,10 +99,10 @@ function handleGetRequest(req, res) {
     Cocktail.findAll({
       where: {
         ingredients: {
-          [Op.like]: "%tequila%"
-        }
-      }
-    }).then(cocktails => {
+          [Op.like]: "%tequila%",
+        },
+      },
+    }).then((cocktails) => {
       cocktailArray = JSON.stringify(cocktails);
     });
     res.send(cocktailArray);
@@ -115,15 +113,15 @@ function handleGetRequest(req, res) {
         [Op.or]: [
           {
             ingredients: {
-              [Op.like]: "%bourbon%"
-            }
+              [Op.like]: "%bourbon%",
+            },
           },
           {
-            ingredients: { [Op.like]: "%whisky%" }
-          }
-        ]
-      }
-    }).then(cocktails => {
+            ingredients: { [Op.like]: "%whisky%" },
+          },
+        ],
+      },
+    }).then((cocktails) => {
       cocktailArray = JSON.stringify(cocktails);
     });
     res.send(cocktailArray);
@@ -135,32 +133,32 @@ function handleGetRequest(req, res) {
         [Op.or]: [
           {
             name: {
-              [Op.like]: "%" + searchInput + "%"
-            }
+              [Op.like]: "%" + searchInput + "%",
+            },
           },
           {
             ingredients: {
-              [Op.like]: "%" + searchInput + "%"
-            }
+              [Op.like]: "%" + searchInput + "%",
+            },
           },
           {
             method: {
-              [Op.like]: "%" + searchInput + "%"
-            }
+              [Op.like]: "%" + searchInput + "%",
+            },
           },
           {
             garnish: {
-              [Op.like]: "%" + searchInput + "%"
-            }
+              [Op.like]: "%" + searchInput + "%",
+            },
           },
           {
             author: {
-              [Op.like]: "%" + searchInput + "%"
-            }
-          }
-        ]
-      }
-    }).then(cocktails => {
+              [Op.like]: "%" + searchInput + "%",
+            },
+          },
+        ],
+      },
+    }).then((cocktails) => {
       cocktailArray = JSON.stringify(cocktails);
     });
     res.redirect("/");
@@ -178,21 +176,21 @@ async function handlePostRequest(req, res) {
 
   if (pathEnd === "register") {
     //Output the data sent to the server
-    username = req.body.userName;
-    password = req.body.password;
+    let username = req.body.userName;
+    let password = req.body.password;
     //Add user to our data structure
-    User.findOne({ where: { username: username } }).then(user => {
+    User.findOne({ where: { username: username } }).then((user) => {
       if (!user) {
         // Hash password
         password = bcrypt.hashSync(password, saltRounds);
-        createdAt = new Date();
-        updatedAt = new Date();
+        let createdAt = new Date();
+        let updatedAt = new Date();
         // Insert into table
         User.create({
           username,
           password,
           createdAt,
-          updatedAt
+          updatedAt,
         });
         res.send("Registered!");
       } else {
@@ -201,8 +199,8 @@ async function handlePostRequest(req, res) {
     });
   } else if (pathEnd === "login") {
     // return logged in user
-    username = req.body.userName;
-    password = req.body.password;
+    let username = req.body.userName;
+    let password = req.body.password;
 
     const user = await User.findOne({ where: { username } });
     if (user === null) {
@@ -219,35 +217,35 @@ async function handlePostRequest(req, res) {
     }
   } else if (pathEnd === "create_session") {
     // return created session
-    username = req.body.userName;
-    sessionID = req.body.sessionID;
+    let username = req.body.userName;
+    let sessionID = req.body.sessionID;
 
     User.update({ sessionID: sessionID }, { where: { username: username } });
   } else if (pathEnd === "logout") {
-    sessionID = req.body.sessionID;
+    let sessionID = req.body.sessionID;
 
     User.update({ sessionID: null }, { where: { sessionID: sessionID } });
     res.send("ok");
   } else if (pathEnd === "authentication") {
-    sessionID = req.body.sessionID;
+    let sessionID = req.body.sessionID;
 
     const user = await User.findOne({ where: { sessionID: sessionID } });
 
     res.send(user.username);
   } else if (pathEnd === "add") {
     // return added cocktail
-    name = req.body.name;
-    imageURL = req.body.imageURL;
-    ingredients = req.body.ingredients;
-    method = req.body.method;
-    garnish = req.body.garnish;
-    cocktailAuthorSessionID = req.body.author;
+    let name = req.body.name;
+    let imageURL = req.body.imageURL;
+    let ingredients = req.body.ingredients;
+    let method = req.body.method;
+    let garnish = req.body.garnish;
+    let cocktailAuthorSessionID = req.body.author;
 
     const user = await User.findOne({
-      where: { sessionID: cocktailAuthorSessionID }
+      where: { sessionID: cocktailAuthorSessionID },
     });
 
-    author = user.username;
+    let author = user.username;
 
     Cocktail.create({
       name,
@@ -255,7 +253,7 @@ async function handlePostRequest(req, res) {
       ingredients,
       method,
       garnish,
-      author
+      author,
     });
     res.send("Cocktail has been added");
   } else if (pathEnd === "remove") {
@@ -264,8 +262,8 @@ async function handlePostRequest(req, res) {
     console.log(name);
     Cocktail.destroy({
       where: {
-        name: name
-      }
+        name: name,
+      },
     });
   } else if (pathEnd === "edit") {
     console.log(pathEnd);
@@ -274,8 +272,8 @@ async function handlePostRequest(req, res) {
     console.log(name);
 
     Cocktail.findOne({
-      where: { name: name }
-    }).then(cocktails => {
+      where: { name: name },
+    }).then((cocktails) => {
       cocktailArray = cocktails;
 
       res.send(JSON.stringify(cocktailArray));
@@ -283,17 +281,17 @@ async function handlePostRequest(req, res) {
   } else if (pathEnd === "editData") {
     // return edited cocktail
     console.log(pathEnd);
-    imageURL = req.body.imageURL;
-    ingredients = req.body.ingredients;
-    method = req.body.method;
-    garnish = req.body.garnish;
+    let imageURL = req.body.imageURL;
+    let ingredients = req.body.ingredients;
+    let method = req.body.method;
+    let garnish = req.body.garnish;
 
     Cocktail.update(
       {
         imageURL: imageURL,
         ingredients: ingredients,
         method: method,
-        garnish: garnish
+        garnish: garnish,
       },
       { where: { name: name } }
     );

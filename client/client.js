@@ -27,7 +27,7 @@ new Vue({
     cocktails: null
   },
   mounted() {
-    axios.get("/cocktails").then(res => (this.cocktails = res.data));
+    axios.get("http://localhost:8080/cocktails").then(res => (this.cocktails = res.data));
   }
 });
 
@@ -188,7 +188,7 @@ function login(e) {
   // Set up function that is called when reply received from server
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      sessionID = xhttp.responseText.slice(2, 38);
+      let sessionID = xhttp.responseText.slice(2, 38);
 
       if (xhttp.responseText.includes("ok")) {
         createSession(userObject.userName, sessionID);

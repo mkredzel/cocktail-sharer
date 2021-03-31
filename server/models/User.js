@@ -3,7 +3,7 @@ const sequelize = require("../database/connection");
 require("./Cocktail");
 
 const User = sequelize.define(
-  "User",
+  "users",
   {
     id: {
       type: Sequelize.INTEGER(11),
@@ -26,13 +26,6 @@ const User = sequelize.define(
     },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE
-  },
-  {
-    classMethods: {
-      associate: function(models) {
-        Cocktail.belongsTo(User, { foreignKey: "author" });
-      }
-    }
   }
 );
 module.exports = User;

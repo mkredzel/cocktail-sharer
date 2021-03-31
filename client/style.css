@@ -48,14 +48,21 @@ body {
 .marketing .col-lg-4 {
   margin-bottom: 20px;
   text-align: center;
+  height: 520px;
+  margin: 0px;
 }
 .marketing h2 {
   font-weight: 400;
 }
-.marketing .col-lg-4 p {
-  margin-right: 10px;
-  margin-left: 10px;
+
+.social {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  width: 100%;
+  right: 0px;
 }
+
 
 /* Featurettes
 ------------------------- */
